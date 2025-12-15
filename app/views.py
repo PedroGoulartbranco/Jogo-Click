@@ -1,8 +1,41 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request, session, redirect, url_for
+from werkzeug.security import generate_password_hash, check_password_hash 
+from .models import Usuario
+from . import db
 
 views_bp = Blueprint("views", __name__)
 
 
-@views_bp.route("/")
+@views_bp.route("/", methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        nome = request.form['nome']
+        senha = request.form['senha']
+
+        usuario_ja_existe = Usuario.query.filter_by(nome=nome).first()
+        if usuario_ja_existe:
+            return 'Usuario já existe!'
+
+        senha_segura = generate_password_hash(senha)
+
+        novo_usuario = Usuario (
+            nome= nome,
+            senha= senha_segura
+        )
+
+        db.session.add(novo_usuario)
+        db.session.commit()
+
+        session["usuario_id"] = novo_usuario.id
+
+        return redirect(url_for('views.menu'))
+
     return render_template("login.html")
+
+@views_bp.route("/menu", methods=['GET'])
+def menu():
+    if "usuario_id" not in session:
+        return redirect(url_for("views.login"))
+    
+    usuario_atual = Usuario.query.get(session["usuario_id"])
+    return render_template("menu.html", nome=usuario_atual.nome)
