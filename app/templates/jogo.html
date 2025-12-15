@@ -11,11 +11,14 @@
     <h1>Jogo Clicker</h1>
 
     <h2>Olá- {{ nome }}</h2>
-    <h2>Dinheiro: {{ dinheiro }}</h2>
+    <h2>Dinheiro: <span id="mostrar_moedas">{{ dinheiro }}</span></h2>
 
     <div>
         <img src="../static/img/moeda.png" alt="" id="moeda_clicavel">
     </div>
-    <script src="{{ url_for('static', filename='js/game.js') }}"></script>
+    <div>
+        <p id="top_10"></p>
+    </div>
+    <script src="{{ url_for('static', filename='js/jogo.js') }}"></script>
 </body>
 </html>

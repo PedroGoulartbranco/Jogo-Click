@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, redirect, url_for
+from flask import Blueprint, render_template, request, session, redirect, url_for, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash 
 from .models import Usuario
 from . import db
@@ -58,3 +58,30 @@ def jogo():
     
     usuario_atual = Usuario.query.get(session["usuario_id"])
     return render_template("jogo.html", nome=usuario_atual.nome, dinheiro=usuario_atual.dinheiro)
+
+@views_bp.route("/clique", methods=['POST'])
+def clique():
+    if "usuario_id" not in session:
+        return redirect(url_for("views.cadastro"))
+    
+    usuario_atual = Usuario.query.get(session["usuario_id"])
+    usuario_atual.dinheiro += 1
+
+    db.session.commit()
+
+    return jsonify({'dinheiro': usuario_atual.dinheiro})
+
+@views_bp.route("/top10", methods=['GET'])
+def top10():
+    print("teste")
+    lista_usuarios = Usuario.query.order_by(Usuario.dinheiro.desc()).limit(10).all()
+
+    ranking = []
+
+    for usuario in lista_usuarios:
+        ranking.append({
+            "nome": usuario.nome,
+            "dinheiro": usuario.dinheiro
+        })
+
+    return jsonify(ranking)
