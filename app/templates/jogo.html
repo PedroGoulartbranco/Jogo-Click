@@ -9,10 +9,12 @@
     <link rel="stylesheet" href="../static/css/jogo.css">
 </head>
 <body>
-    <h1>Banco Tycoon</h1>
-    <hr>
+    <div id="div_titulo">
+        <h1>Banco Tycoon</h1>
+    </div>
+    
 
-    <div>
+    <div id="info_jogador">
         <h2>Jogador: {{ nome }}</h2>
         <h2>Dinheiro: <span id="mostrar_moedas">{{ dinheiro }}</span></h2>
         <h2>Cliques: <span id="mostrar_cliques">{{ cliques }}</span></h2>

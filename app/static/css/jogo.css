@@ -25,3 +25,13 @@ h1 {
 #moeda_clicavel:active {
     transform: scale(0.95); /*Efeito de clique daora */
 }
+
+#info_jogador {
+    border-width: 0ch;
+    border: 2px solid black;
+    display: inline-block;
+}
+
+#div_titulo {
+    border-bottom: 2px solid black;
+}
