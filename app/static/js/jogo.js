@@ -87,7 +87,6 @@ function atualizar_preco_multiplicor() {
             if (multiplicador_cliques == 0) {
                 texto_multiplicador.innerHTML = `Click ${multiplicador_cliques + 2}x`
             } else {
-                alert(multiplicador_cliques)
                 texto_multiplicador.innerHTML = `Click ${multiplicador_cliques + 1}x`
             }
             
@@ -96,7 +95,9 @@ function atualizar_preco_multiplicor() {
         .catch(error => console.log(error));
 }
 
-console.log(multiplicador_cliques)
+function botao_comprar_automatico() {
+    
+}
 
 atualizar_preco_multiplicor()
 
