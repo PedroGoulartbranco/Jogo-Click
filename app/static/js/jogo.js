@@ -3,6 +3,9 @@ let mostrar_moedas = document.getElementById("mostrar_moedas")
 let paragrafo_10 = document.getElementById("top_10")
 let mostrar_cliques = document.getElementById("mostrar_cliques")
 
+let texto_multiplicador = document.getElementById("texto_multiplicador")
+let botao_multiplicador = document.getElementById("botao_multiplicador")
+
 let multiplicador_cliques = 0
 
 function atualizarTabela() {
@@ -73,11 +76,18 @@ function atualizar_preco_multiplicor() {
     
         .then(data => {
             multiplicador_cliques += data.multiplicador
-            alert(data.multiplicador)
+            if (multiplicador_cliques == 0) {
+                texto_multiplicador.innerHTML = `Click ${multiplicador_cliques + 2}x`
+            } else {
+                texto_multiplicador.innerHTML = `Click ${multiplicador_cliques + 1}x`
+            }
+            
         })
     
         .catch(error => console.log(error));
 }
+
+atualizar_preco_multiplicor()
 
 setInterval(atualizarTabela, 2000)
 
