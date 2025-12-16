@@ -1,4 +1,27 @@
 #moeda_clicavel {
-    width: 60vh;
-    height: 60vh;
+    width: 300px;  
+    height: auto;
+    cursor: pointer;
+}
+
+h1 {
+    text-align: center;
+    font-size: 15vh;
+}
+
+#div_moeda {
+    display: flex;
+    justify-content: center; 
+    margin-top: 30px;        
+}
+
+.div_top10 {
+    position: fixed;
+    right: 20px;
+    top: 150px;
+    background-color: rgba(0, 0, 0, 0.226);
+}
+
+#moeda_clicavel:active {
+    transform: scale(0.95); /*Efeito de clique daora */
 }

@@ -73,7 +73,6 @@ def clique():
 
 @views_bp.route("/top10", methods=['GET'])
 def top10():
-    print("teste")
     lista_usuarios = Usuario.query.order_by(Usuario.dinheiro.desc()).limit(10).all()
 
     ranking = []
