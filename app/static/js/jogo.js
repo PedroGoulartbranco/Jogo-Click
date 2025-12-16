@@ -41,6 +41,11 @@ moeda.addEventListener("click", () => {
     
 })
 
+function botao_comprar(numero_botao) {
+    alert("oi")
+}
+
 setInterval(atualizarTabela, 2000)
 
 atualizarTabela()
+
