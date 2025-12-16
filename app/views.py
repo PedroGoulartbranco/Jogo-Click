@@ -66,7 +66,13 @@ def clique():
         return redirect(url_for("views.cadastro"))
     
     usuario_atual = Usuario.query.get(session["usuario_id"])
-    usuario_atual.dinheiro += 1
+    valor_por_clique = 1
+
+    aumentar_clique = Inventario.query.filter_by(usuario_id=session["usuario_id"], item_id=1).first()
+    if aumentar_clique:
+        valor_por_clique += aumentar_clique.quantidade
+
+    usuario_atual.dinheiro += valor_por_clique
     usuario_atual.cliques += 1
 
     db.session.commit()
