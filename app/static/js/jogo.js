@@ -3,6 +3,8 @@ let mostrar_moedas = document.getElementById("mostrar_moedas")
 let paragrafo_10 = document.getElementById("top_10")
 let mostrar_cliques = document.getElementById("mostrar_cliques")
 
+let multiplicador_cliques = 0
+
 function atualizarTabela() {
     fetch('http://127.0.0.1:5000/top10')
 
@@ -53,18 +55,26 @@ function botao_comprar(numero_botao) {
     
         .then(data => {
             console.log(data)
-            mostrar_moedas.innerHTML = data.novo_dinheiro
+            if (data.sucesso == true) {
+                mostrar_moedas.innerHTML = data.novo_dinheiro
+                atualizar_preco_multiplicor()
+            } else {
+                alert("Saldo insuficiente")
+            }
         })
     
         .catch(error => console.log(error));
 }
 
 function atualizar_preco_multiplicor() {
-    fetch('url')
+    fetch('http://127.0.0.1:5000/ver_multiplicador')
     
         .then(response => response.json())
     
-        .then(data => console.log(data))
+        .then(data => {
+            multiplicador_cliques += data.multiplicador
+            alert(data.multiplicador)
+        })
     
         .catch(error => console.log(error));
 }

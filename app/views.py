@@ -5,6 +5,8 @@ from . import db
 
 views_bp = Blueprint("views", __name__)
 
+
+
 @views_bp.route("/login", methods=['GET', 'POST'])
 def login():
     erro = None
@@ -66,11 +68,12 @@ def clique():
         return redirect(url_for("views.cadastro"))
     
     usuario_atual = Usuario.query.get(session["usuario_id"])
+
     valor_por_clique = 1
 
     aumentar_clique = Inventario.query.filter_by(usuario_id=session["usuario_id"], item_id=1).first()
     if aumentar_clique:
-        valor_por_clique += aumentar_clique.quantidade
+        valor_por_clique = aumentar_clique.quantidade
 
     usuario_atual.dinheiro += valor_por_clique
     usuario_atual.cliques += 1
@@ -103,12 +106,32 @@ def comprar_item(id_item):
     
     usuario.dinheiro -= item.preco
 
-    item_comprado = Inventario (
-        usuario_id = usuario.id,
-        item_id = id_item,
-        quantidade = 1
-    )
+    if item.id_item == 1: #Caso for um multiplicador
+        jogador_tem_ou_nao_tem_multiplicador =  Inventario.query.filter_by(usuario_id=session["usuario_id"], item_id=1).first()
+        if jogador_tem_ou_nao_tem_multiplicador:
+           jogador_tem_ou_nao_tem_multiplicador.quantidade += 1
+        else:
+            item_comprado = Inventario (
+            usuario_id = usuario.id,
+            item_id = id_item,
+            quantidade = 2
+        )
+            db.session.add(item_comprado)
+    else:
 
-    db.session.add(item_comprado)
+        item_comprado = Inventario (
+            usuario_id = usuario.id,
+            item_id = id_item,
+            quantidade = 1
+        )
+
+        db.session.add(item_comprado)
     db.session.commit()
     return jsonify({"sucesso": True, "novo_dinheiro": usuario.dinheiro,"mensagem": f"Você comprou {item.nome}!"})
+
+@views_bp.route("/ver_multiplicador", methods=['GET'])
+def ver_multiplicador():
+    aumentar_clique = Inventario.query.filter_by(usuario_id=session["usuario_id"], item_id=1).first()
+    if aumentar_clique:
+        return jsonify({"multiplicador": aumentar_clique.quantidade})
+    return jsonify({"multiplicador": 0})
