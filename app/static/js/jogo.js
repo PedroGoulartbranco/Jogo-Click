@@ -59,6 +59,16 @@ function botao_comprar(numero_botao) {
         .catch(error => console.log(error));
 }
 
+function atualizar_preco_multiplicor() {
+    fetch('url')
+    
+        .then(response => response.json())
+    
+        .then(data => console.log(data))
+    
+        .catch(error => console.log(error));
+}
+
 setInterval(atualizarTabela, 2000)
 
 atualizarTabela()
