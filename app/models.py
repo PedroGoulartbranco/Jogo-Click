@@ -1,4 +1,5 @@
 from . import db
+from datetime import datetime, timezone
 
 class Usuario(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -6,6 +7,7 @@ class Usuario(db.Model):
     senha = db.Column(db.String(200), nullable=False)
     dinheiro = db.Column(db.Integer, nullable=False)
     cliques = db.Column(db.Integer, default=0)
+    ultima_atualizacao = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
 class Itens(db.Model):
     id_item = db.Column(db.Integer, primary_key=True)

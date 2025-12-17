@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, request, session, redirect, url_fo
 from werkzeug.security import generate_password_hash, check_password_hash 
 from .models import Usuario, Itens, Inventario
 from . import db
+from datetime import datetime, timezone
+from math import floor
 
 views_bp = Blueprint("views", __name__)
 
@@ -76,8 +78,21 @@ def clique():
     if aumentar_clique:
         valor_por_clique = aumentar_clique.quantidade
 
-    usuario_atual.dinheiro += valor_por_clique
+    horario_atual = datetime.now(timezone.utc)
+    segundos_passados = (horario_atual - usuario_atual.ultima_atualizacao.replace(tzinfo=timezone.utc)).total_seconds()
+    quantidade_de_cliques_automaticos = 0
+
+    clique_automatico_1 = Inventario.query.filter_by(usuario_id=session["usuario_id"], item_id=2).first()
+    if clique_automatico_1:
+        quantidade_de_cliques_automaticos = clique_automatico_1.quantidade
+    else:
+        quantidade_de_cliques_automaticos = 0
+    dinheiro_ganho_passivo = segundos_passados * quantidade_de_cliques_automaticos
+    dinheiro_ganho_passivo = floor(dinheiro_ganho_passivo)
+
+    usuario_atual.dinheiro += int(valor_por_clique + dinheiro_ganho_passivo)
     usuario_atual.cliques += 1
+    usuario_atual.ultima_atualizacao = horario_atual
 
     db.session.commit()
 

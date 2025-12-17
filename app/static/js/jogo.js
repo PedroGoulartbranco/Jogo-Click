@@ -142,6 +142,17 @@ function atualizar_preco_do_automatico(){
         .catch(error => console.log(error));
 }
 
+setInterval(() => { 
+    if (numero_de_automaticos > 0) {
+        let dinheiro_na_tela = parseInt(mostrar_moedas.innerHTML)
+        mostrar_moedas.innerHTML = dinheiro_na_tela + numero_de_automaticos
+    }
+}, 1000)
+
+setInterval(() => {
+
+}, 20000)
+
 atualizar_preco_do_automatico()
 
 atualizar_preco_multiplicor()
