@@ -135,6 +135,8 @@ function atualizar_preco_do_automatico(){
             
             mostrar_automatico_info.innerHTML = `${numero_de_automaticos}`
             botao_comprar_automatico_html.innerHTML = `R$${preco_automatico}`
+            mostrar_nivel_automatico.innerHTML = `Clique Automático <br>Nível ${numero_de_automaticos}/10`
+            texto_automatico_titulo.innerHTML = `Automático ${numero_de_automaticos + 1}x`
         })
     
         .catch(error => console.log(error));
