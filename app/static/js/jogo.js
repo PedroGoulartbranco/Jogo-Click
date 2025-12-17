@@ -8,8 +8,16 @@ let botao_multiplicador = document.getElementById("botao_multiplicador")
 let mostrar_multiplicador = document.getElementById("mostrar_multiplicador")
 let mostrar_nivel_multiplicador = document.getElementById("mostrar_nivel_multiplicador")
 
+let texto_automatico_titulo = document.getElementById("texto_automatico_titulo")
+let mostrar_nivel_automatico = document.getElementById("mostrar_nivel_automatico")
+let mostrar_automatico_info = document.getElementById("mostrar_automatico_info")
+let botao_comprar_automatico_html = document.getElementById("botao_comprar_automatico")
+
 let multiplicador_cliques = 0
 let preco_multiplicador = 0
+
+let preco_automatico = 0
+let numero_de_automaticos = 0
 
 function atualizarTabela() {
     fetch('http://127.0.0.1:5000/top10')
@@ -105,11 +113,34 @@ function botao_comprar_automatico() {
         .then(response => response.json())
     
         .then(data => {
-            mostrar_moedas.innerHTML = data.novo_dinheiro
+            if (data.sucesso == true) {
+                mostrar_moedas.innerHTML = data.novo_dinheiro
+                atualizar_preco_do_automatico()
+            } else {
+                alert(data.erro)
+            }
         })
     
         .catch(error => console.log(error));
 }
+
+function atualizar_preco_do_automatico(){
+    fetch('http://127.0.0.1:5000/ver_automaticos_1')
+    
+        .then(response => response.json())
+    
+        .then(data => {
+            numero_de_automaticos = data.numero_automatico
+            preco_automatico = data.preco
+            
+            mostrar_automatico_info.innerHTML = `${numero_de_automaticos}`
+            botao_comprar_automatico_html.innerHTML = `R$${preco_automatico}`
+        })
+    
+        .catch(error => console.log(error));
+}
+
+atualizar_preco_do_automatico()
 
 atualizar_preco_multiplicor()
 

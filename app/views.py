@@ -146,9 +146,9 @@ def comprar_clique_automatico():
     item = Itens.query.get(2)
     usuario = Usuario.query.filter_by(id=session['usuario_id']).first()
 
-    clique_automatico_no_inventario = Inventario.query.filter_by(usuario_id=session["usuario_id"], item_id=1).first()
+    clique_automatico_no_inventario = Inventario.query.filter_by(usuario_id=session["usuario_id"], item_id=2).first()
     if clique_automatico_no_inventario:
-        if usuario.dinheiro < lista_preco_clique_automaticos_1[clique_automatico_no_inventario.quantidade - 1]:
+        if usuario.dinheiro < lista_preco_clique_automaticos_1[clique_automatico_no_inventario.quantidade]:
             return jsonify({"sucesso": False, "erro": "Dinheiro insuficiente"})
         usuario.dinheiro -= lista_preco_clique_automaticos_1[clique_automatico_no_inventario.quantidade - 1]
         clique_automatico_no_inventario.quantidade += 1
@@ -156,7 +156,7 @@ def comprar_clique_automatico():
         if usuario.dinheiro < lista_preco_clique_automaticos_1[0]:
             return jsonify({"sucesso": False, "erro": "Dinheiro insuficiente"})
         usuario.dinheiro -= lista_preco_clique_automaticos_1[0]
-        automatico_comprado = Itens (
+        automatico_comprado = Inventario (
             usuario_id = usuario.id,
             item_id = 2,
             quantidade = 1
@@ -164,3 +164,10 @@ def comprar_clique_automatico():
         db.session.add(automatico_comprado)
     db.session.commit()
     return jsonify({"sucesso": True, "novo_dinheiro": usuario.dinheiro,"mensagem": f"Você comprou {item.nome}!"})
+
+@views_bp.route("/ver_automaticos_1", methods=['GET'])
+def ver_automaticos_1():
+    numero_de_automaticos = Inventario.query.filter_by(usuario_id=session["usuario_id"], item_id=2).first()
+    if numero_de_automaticos:
+        return jsonify({"numero_automatico": numero_de_automaticos.quantidade, "preco": lista_preco_clique_automaticos_1[numero_de_automaticos.quantidade]})
+    return jsonify({"numero_automatico": 0, "preco": lista_preco_clique_automaticos_1[0]})
