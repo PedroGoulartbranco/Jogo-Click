@@ -6,9 +6,9 @@ from datetime import datetime, timezone
 from math import floor
 
 views_bp = Blueprint("views", __name__)
-#lista_preco_multiplicadores = [100, 200, 400, 600, 1000, 1300, 1900, 2300, 3000, 3500]
-lista_preco_multiplicadores = [100, 200, 400, 600, 100, 100, 190, 200, 300, 350]
-lista_preco_clique_automaticos_1 = [150, 300, 400, 520, 600, 780, 1000, 1200, 1500, 2000]
+lista_preco_multiplicadores = [100, 200, 400, 600, 1000, 1300, 1900, 2300, 3000, 3500]
+lista_preco_clique_automaticos_1 = [15, 30, 40, 50, 6, 7, 10, 10, 10, 20]
+#lista_preco_clique_automaticos_1 = [150, 300, 400, 520, 600, 780, 1000, 1200, 1500, 2000]
 lista_tempo_off = [3600, 7200, 10800, 14400, 18000, 21600, 25200, 28800, 32400, 36000]
 
 @views_bp.route("/login", methods=['GET', 'POST'])
@@ -78,7 +78,7 @@ def clique():
 
     aumentar_clique = Inventario.query.filter_by(usuario_id=session["usuario_id"], item_id=1).first()
     if aumentar_clique:
-        valor_por_clique += aumentar_clique.quantidade
+        valor_por_clique = aumentar_clique.quantidade
 
     horario_atual = datetime.now(timezone.utc)
     segundos_passados = (horario_atual - usuario_atual.ultima_atualizacao.replace(tzinfo=timezone.utc)).total_seconds()
@@ -167,7 +167,9 @@ def comprar_clique_automatico():
 
     clique_automatico_no_inventario = Inventario.query.filter_by(usuario_id=session["usuario_id"], item_id=2).first()
     if clique_automatico_no_inventario:
-        if usuario.dinheiro < lista_preco_clique_automaticos_1[clique_automatico_no_inventario.quantidade]:
+        if clique_automatico_no_inventario.quantidade >= 10:
+            return jsonify({"sucesso": False, "erro": "Limite Máximo"})
+        if usuario.dinheiro < lista_preco_clique_automaticos_1[clique_automatico_no_inventario.quantidade - 1]:
             return jsonify({"sucesso": False, "erro": "Dinheiro insuficiente"})
         usuario.dinheiro -= lista_preco_clique_automaticos_1[clique_automatico_no_inventario.quantidade - 1]
         clique_automatico_no_inventario.quantidade += 1
@@ -188,7 +190,7 @@ def comprar_clique_automatico():
 def ver_automaticos_1():
     numero_de_automaticos = Inventario.query.filter_by(usuario_id=session["usuario_id"], item_id=2).first()
     if numero_de_automaticos:
-        return jsonify({"numero_automatico": numero_de_automaticos.quantidade, "preco": lista_preco_clique_automaticos_1[numero_de_automaticos.quantidade]})
+        return jsonify({"numero_automatico": numero_de_automaticos.quantidade, "preco": lista_preco_clique_automaticos_1[numero_de_automaticos.quantidade - 1]})
     return jsonify({"numero_automatico": 0, "preco": lista_preco_clique_automaticos_1[0]})
 
 @views_bp.route("/atualizar_dinheiro", methods=['GET'])

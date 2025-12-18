@@ -92,6 +92,7 @@ function atualizar_preco_multiplicor() {
             mostrar_multiplicador.innerHTML = `${multiplicador_cliques}x`
             if (multiplicador_cliques == 10){
                 botao_multiplicador.innerHTML = `Máximo`
+                botao_multiplicador.classList = 'btn btn-success'
             } else {
                 botao_multiplicador.innerHTML = `R$${preco_multiplicador}`
             }
@@ -141,10 +142,17 @@ function atualizar_preco_do_automatico(){
             numero_de_automaticos = data.numero_automatico
             preco_automatico = data.preco
             
+            if (numero_de_automaticos >= 10) {
+                botao_comprar_automatico_html.innerHTML = `Máximo`
+                texto_automatico_titulo.innerHTML = `Automático 10x Alcançado`
+                botao_comprar_automatico_html.classList = 'btn btn-success'
+            } else {
+                botao_comprar_automatico_html.innerHTML = `R$${preco_automatico}`
+                texto_automatico_titulo.innerHTML = `Automático ${numero_de_automaticos + 1}x`
+            }
+
             mostrar_automatico_info.innerHTML = `${numero_de_automaticos}`
-            botao_comprar_automatico_html.innerHTML = `R$${preco_automatico}`
             mostrar_nivel_automatico.innerHTML = `Clique Automático <br>Nível ${numero_de_automaticos}/10`
-            texto_automatico_titulo.innerHTML = `Automático ${numero_de_automaticos + 1}x`
         })
     
         .catch(error => console.log(error));
