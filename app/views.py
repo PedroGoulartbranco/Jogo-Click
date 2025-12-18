@@ -6,8 +6,8 @@ from datetime import datetime, timezone
 from math import floor
 
 views_bp = Blueprint("views", __name__)
-
-lista_preco_multiplicadores = [100, 200, 400, 600, 1000, 1300, 1900, 2300, 3000, 3500]
+#lista_preco_multiplicadores = [100, 200, 400, 600, 1000, 1300, 1900, 2300, 3000, 3500]
+lista_preco_multiplicadores = [100, 200, 400, 600, 100, 100, 190, 200, 300, 350]
 lista_preco_clique_automaticos_1 = [150, 300, 400, 520, 600, 780, 1000, 1200, 1500, 2000]
 lista_tempo_off = [3600, 7200, 10800, 14400, 18000, 21600, 25200, 28800, 32400, 36000]
 
@@ -78,7 +78,7 @@ def clique():
 
     aumentar_clique = Inventario.query.filter_by(usuario_id=session["usuario_id"], item_id=1).first()
     if aumentar_clique:
-        valor_por_clique = aumentar_clique.quantidade
+        valor_por_clique += aumentar_clique.quantidade
 
     horario_atual = datetime.now(timezone.utc)
     segundos_passados = (horario_atual - usuario_atual.ultima_atualizacao.replace(tzinfo=timezone.utc)).total_seconds()
@@ -122,6 +122,8 @@ def comprar_item(id_item):
     if item.id_item == 1: #Caso for um multiplicador
         jogador_tem_ou_nao_tem_multiplicador =  Inventario.query.filter_by(usuario_id=session["usuario_id"], item_id=1).first()
         if jogador_tem_ou_nao_tem_multiplicador:
+            if jogador_tem_ou_nao_tem_multiplicador.quantidade >= 10:
+                return jsonify({"sucesso": False, "erro": "Limite Máximo Já Atingindo"})
             if usuario.dinheiro < lista_preco_multiplicadores[jogador_tem_ou_nao_tem_multiplicador.quantidade - 1]:
                 return jsonify({"sucesso": False, "erro": "Dinheiro insuficiente"})
             usuario.dinheiro -= lista_preco_multiplicadores[jogador_tem_ou_nao_tem_multiplicador.quantidade - 1]
@@ -132,7 +134,7 @@ def comprar_item(id_item):
             item_comprado = Inventario (
             usuario_id = usuario.id,
             item_id = id_item,
-            quantidade = 2
+            quantidade = 1
         )
             usuario.dinheiro -= lista_preco_multiplicadores[0]
             db.session.add(item_comprado)
@@ -202,6 +204,9 @@ def atualizar_dinheiro():
         quantidade_de_cliques_automaticos = clique_automatico_1.quantidade
     else:
         quantidade_de_cliques_automaticos = 0
+    if segundos_passados > lista_tempo_off[usuario_atual.limite_off]: #Limita o tempo fora
+        segundos_passados = lista_tempo_off[usuario_atual.limite_off]
+
     dinheiro_ganho_passivo = segundos_passados * quantidade_de_cliques_automaticos
     dinheiro_ganho_passivo = floor(dinheiro_ganho_passivo)
 

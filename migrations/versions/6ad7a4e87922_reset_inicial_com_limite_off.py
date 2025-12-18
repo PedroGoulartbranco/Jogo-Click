@@ -1,8 +1,8 @@
-"""Adicionando coluna limite_offline
+"""Reset inicial com limite_off
 
-Revision ID: ae1ca3affbd0
+Revision ID: 6ad7a4e87922
 Revises: 
-Create Date: 2025-12-17 13:28:44.855937
+Create Date: 2025-12-18 10:18:31.346449
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ae1ca3affbd0'
+revision = '6ad7a4e87922'
 down_revision = None
 branch_labels = None
 depends_on = None

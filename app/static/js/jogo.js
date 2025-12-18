@@ -73,7 +73,7 @@ function botao_comprar(numero_botao) {
                 mostrar_moedas.innerHTML = data.novo_dinheiro
                 atualizar_preco_multiplicor()
             } else {
-                alert("Saldo insuficiente")
+                alert(data.erro)
             }
         })
     
@@ -90,11 +90,18 @@ function atualizar_preco_multiplicor() {
             multiplicador_cliques = data.multiplicador
             preco_multiplicador = data.preco
             mostrar_multiplicador.innerHTML = `${multiplicador_cliques}x`
-            botao_multiplicador.innerHTML = `R$${preco_multiplicador}`
+            if (multiplicador_cliques == 10){
+                botao_multiplicador.innerHTML = `Máximo`
+            } else {
+                botao_multiplicador.innerHTML = `R$${preco_multiplicador}`
+            }
             mostrar_nivel_multiplicador.innerHTML = `Multiplica o click <br>Nível: ${multiplicador_cliques}/10`
             if (multiplicador_cliques == 0) {
                 texto_multiplicador.innerHTML = `Click ${multiplicador_cliques + 2}x`
-            } else {
+            } else if (multiplicador_cliques == 10) {
+                 texto_multiplicador.innerHTML = `Click 10x Máximo Alcançado`
+            }
+            else {
                 texto_multiplicador.innerHTML = `Click ${multiplicador_cliques + 1}x`
             }
             
