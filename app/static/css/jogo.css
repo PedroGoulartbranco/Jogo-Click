@@ -1,6 +1,6 @@
 #moeda_clicavel {
     width: 300px;  
-    height: auto;
+    height: 300px;
     cursor: pointer;
 }
 
@@ -14,13 +14,24 @@ h1 {
     justify-content: center; 
     margin-top: 30px;        
     flex-grow: 1; /* Faz ela ocupar todo o espaço central */
+    height: 50vh; /* 50% da altura da janela visual */
+
+    border-style: solid;
+    border-width: 0px 0px 2px 0px;
+    border-color: black;
 }
 
 .div_top10 {
-    position: fixed;
-    right: 20px;
-    top: 150px;
+    
     background-color: rgba(0, 0, 0, 0.226);
+
+    border-style: solid;
+    border-width: 0px 0px 2px 2px;
+    border-color: black;
+    display: inline-block;
+    min-height: 100vh;
+   
+    
 }
 
 #moeda_clicavel:active {
@@ -41,6 +52,6 @@ h1 {
 
 #div_centralizar {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     height: 100vh;
 }
